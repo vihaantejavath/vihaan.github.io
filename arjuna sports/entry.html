@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            height: 280px;
+            position: absolute;
+            bottom: 115px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: #4CAF50;
+        }
+        select:focus {
+            border-color: #4CAF50;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .qr-code {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .error {
+            color: rgb(132, 26, 26);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: -15px 0;
+            position: relative;
+            left: 30px;
+            
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: calc(80% - 20px);
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="entry">
+    <div class="overlap-group-wrapper">
+        <div class="overlap-group">
+            <img class="rectangle" src="img/rectangle-1.png" />
+            <div class="container">
+                <h2>Student Register</h2>
+                <form id="registerForm">
+                    <div>
+                        <label for="studentName">Name</label>
+                        <input type="text" id="studentName" placeholder="Enter your name" required>
+                    </div>
+                    <div>
+                        <label for="studentId">Roll Number</label>
+                        <input type="text" id="studentId" placeholder="Enter your roll number" required>
+                    </div>
+                    <div>
+                        <label for="sportChoice">Sport Choice</label>
+                        <select id="sportChoice" required>
+                            <option value="">Select Sport</option>
+                            <option value="gym">Gym</option>
+                            <option value="badminton">Badminton</option>
+                        </select>
+                    </div>
+                    <div id="error" class="error"></div>
+                    <button type="submit" class="btn">Submit</button>
+                </form>
+                <div class="qr-code" id="qrcode"></div>
+            </div>
+            <div class="text-wrapper">Entry</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        let name = document.getElementById('studentName').value.trim();
+        let rollNumber = document.getElementById('studentId').value.trim();
+        let sportChoice = document.getElementById('sportChoice').value.trim();
+
+        // If all fields are filled, generate the QR code
+        if (name && rollNumber && sportChoice) {
+            let entry = { name, rollNumber, sportChoice };
+            let qrCodeDiv = document.getElementById('qrcode');
+
+            // Generate the QR code image using Google Charts API
+            let qrUrl = 'https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=' + encodeURIComponent(JSON.stringify(entry));
+            qrCodeDiv.innerHTML = `<img src="${qrUrl}" alt="QR Code">`;
+
+            // Clear error message
+            document.getElementById('error').textContent = '';
+        } else {
+            // Show error message if any field is empty
+            document.getElementById('error').textContent = 'Please fill in all fields.';
+        }
+    });
+</script>
+</body>
+</html>
